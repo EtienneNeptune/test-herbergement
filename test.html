@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #0b1120;
+  color: #e8e6df;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard {
+  padding: 40px 44px 36px;
+  background: linear-gradient(168deg, #0b1120 0%, #0f1729 40%, #111d33 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard::before {
+  content: '';
+  position: absolute;
+  top: -120px;
+  right: -80px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.header-left h1 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #f0ede5;
+  letter-spacing: -0.5px;
+  margin-bottom: 4px;
+}
+
+.header-left .subtitle {
+  font-size: 13px;
+  color: #7a8599;
+  font-weight: 400;
+}
+
+.header-right {
+  text-align: right;
+  display: flex;
+  gap: 28px;
+  align-items: flex-end;
+}
+
+.header-ticker {
+  text-align: right;
+}
+
+.header-ticker .label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #5a6577;
+  margin-bottom: 2px;
+}
+
+.header-ticker .value {
+  font-size: 22px;
+  font-weight: 700;
+  color: #f0ede5;
+}
+
+.header-ticker .change {
+  font-size: 12px;
+  color: #34d399;
+  font-weight: 500;
+}
+
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.metric-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 16px 18px;
+  position: relative;
+}
+
+.metric-card.highlight {
+  background: rgba(59,130,246,0.08);
+  border-color: rgba(59,130,246,0.2);
+}
+
+.metric-card .label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #5a6577;
+  margin-bottom: 8px;
+}
+
+.metric-card .value {
+  font-size: 26px;
+  font-weight: 700;
+  color: #f0ede5;
+  line-height: 1.1;
+}
+
+.metric-card .sub {
+  font-size: 11px;
+  color: #34d399;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.section-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #5a6577;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+
+.charts-row {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.chart-panel {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 20px 22px;
+}
+
+.chart-panel .panel-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #c0bdb5;
+  margin-bottom: 4px;
+}
+
+.chart-panel .panel-sub {
+  font-size: 11px;
+  color: #5a6577;
+  margin-bottom: 16px;
+}
+
+.chart-container {
+  position: relative;
+  width: 100%;
+}
+
+.bottom-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.insight-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 20px 22px;
+}
+
+.insight-card .card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #c0bdb5;
+  margin-bottom: 14px;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.stat-row:last-child { border-bottom: none; }
+
+.stat-row .stat-label {
+  font-size: 12px;
+  color: #7a8599;
+}
+
+.stat-row .stat-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #e8e6df;
+}
+
+.stat-row .stat-value.green { color: #34d399; }
+
+.guidance-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.guidance-item {
+  background: rgba(59,130,246,0.06);
+  border: 1px solid rgba(59,130,246,0.12);
+  border-radius: 8px;
+  padding: 14px 16px;
+  text-align: center;
+}
+
+.guidance-item .g-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #6b93c4;
+  margin-bottom: 6px;
+}
+
+.guidance-item .g-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #93bbf0;
+}
+
+.guidance-item .g-sub {
+  font-size: 11px;
+  color: #4a7ab8;
+  margin-top: 2px;
+}
+
+.macro-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.macro-item {
+  text-align: center;
+  padding: 14px 10px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 8px;
+}
+
+.macro-item .m-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: #93bbf0;
+  margin-bottom: 4px;
+}
+
+.macro-item .m-label {
+  font-size: 10px;
+  color: #5a6577;
+  line-height: 1.4;
+}
+
+.legend {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #7a8599;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  font-size: 10px;
+  color: #3d4a5c;
+}
+
+.mix-bar-container {
+  display: flex;
+  height: 28px;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.mix-segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  padding: 0 6px;
+}
+</style>
+</head>
+<body>
+<div class="dashboard">
+
+<div class="header">
+  <div class="header-left">
+    <h1>Dell Technologies — Tableau de bord financier</h1>
+    <div class="subtitle">NYSE : DELL &middot; Résultats Q4 FY2026 &amp; Guidance FY2027 &middot; 27 mars 2026</div>
+  </div>
+  <div class="header-right">
+    <div class="header-ticker">
+      <div class="label">Cours</div>
+      <div class="value">$177,98</div>
+      <div class="change">+85% sur 1 an</div>
+    </div>
+    <div class="header-ticker">
+      <div class="label">PE FY27e</div>
+      <div class="value">~14x</div>
+    </div>
+  </div>
+</div>
+
+<div class="metrics-row">
+  <div class="metric-card">
+    <div class="label">Revenu FY26</div>
+    <div class="value">$113,5B</div>
+    <div class="sub">+19% YoY</div>
+  </div>
+  <div class="metric-card">
+    <div class="label">EPS non-GAAP FY26</div>
+    <div class="value">$10,30</div>
+    <div class="sub">+27% YoY</div>
+  </div>
+  <div class="metric-card highlight">
+    <div class="label">Backlog IA</div>
+    <div class="value">$43B</div>
+    <div class="sub">&times;10 en 12 mois</div>
+  </div>
+  <div class="metric-card">
+    <div class="label">Cash-flow ops. FY26</div>
+    <div class="value">$11,2B</div>
+    <div class="sub">Record &middot; +699% Q4</div>
+  </div>
+  <div class="metric-card">
+    <div class="label">Retour actionnaires</div>
+    <div class="value">$7,5B</div>
+    <div class="sub">54M actions rachetées</div>
+  </div>
+</div>
+
+<div class="section-title">Guidance FY2027</div>
+<div class="guidance-strip">
+  <div class="guidance-item">
+    <div class="g-label">Revenu</div>
+    <div class="g-value">$140B</div>
+    <div class="g-sub">+23% YoY</div>
+  </div>
+  <div class="guidance-item">
+    <div class="g-label">Revenu IA serveurs</div>
+    <div class="g-value">$50B</div>
+    <div class="g-sub">+100% YoY</div>
+  </div>
+  <div class="guidance-item">
+    <div class="g-label">EPS non-GAAP</div>
+    <div class="g-value">$12,90</div>
+    <div class="g-sub">+25% YoY</div>
+  </div>
+  <div class="guidance-item">
+    <div class="g-label">Q1 FY27 — Revenu</div>
+    <div class="g-value">$35,2B</div>
+    <div class="g-sub">+51% YoY &middot; EPS $2,90 (+87%)</div>
+  </div>
+</div>
+
+<div class="charts-row">
+  <div class="chart-panel">
+    <div class="panel-title">Trajectoire IA — Commandes, livraisons &amp; backlog</div>
+    <div class="panel-sub">Données trimestrielles en milliards de dollars</div>
+    <div class="legend">
+      <span class="legend-item"><span class="legend-dot" style="background:#3b82f6"></span>Commandes IA</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#34d399"></span>Livraisons IA</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>Backlog IA</span>
+    </div>
+    <div class="chart-container" style="height:220px">
+      <canvas id="aiChart"></canvas>
+    </div>
+  </div>
+  <div class="chart-panel">
+    <div class="panel-title">Revenu trimestriel par segment</div>
+    <div class="panel-sub">ISG + CSG empilés ($Mds)</div>
+    <div class="legend">
+      <span class="legend-item"><span class="legend-dot" style="background:#6366f1"></span>ISG</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#3b82f6"></span>CSG</span>
+    </div>
+    <div class="chart-container" style="height:220px">
+      <canvas id="revChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-row">
+  <div class="insight-card">
+    <div class="card-title">Performance Q4 FY2026</div>
+    <div class="stat-row"><span class="stat-label">Revenu total</span><span class="stat-value">$33,4B (+39%)</span></div>
+    <div class="stat-row"><span class="stat-label">EPS non-GAAP</span><span class="stat-value">$3,89 (+45%)</span></div>
+    <div class="stat-row"><span class="stat-label">Revenu ISG</span><span class="stat-value">$19,6B (+73%)</span></div>
+    <div class="stat-row"><span class="stat-label">Marge op. ISG</span><span class="stat-value green">14,8%</span></div>
+    <div class="stat-row"><span class="stat-label">Revenu CSG</span><span class="stat-value">$13,5B (+14%)</span></div>
+    <div class="stat-row"><span class="stat-label">Cash-flow ops.</span><span class="stat-value">$4,7B (record)</span></div>
+    <div class="stat-row"><span class="stat-label">Adj. FCF</span><span class="stat-value green">$5,1B (+973%)</span></div>
+  </div>
+
+  <div class="insight-card">
+    <div class="card-title">Décomposition Q4 ($33,4B)</div>
+    <div class="mix-bar-container">
+      <div class="mix-segment" style="flex:9.0;background:#3b82f6">$9,0B</div>
+      <div class="mix-segment" style="flex:5.9;background:#6366f1">$5,9B</div>
+      <div class="mix-segment" style="flex:4.8;background:#34d399">$4,8B</div>
+      <div class="mix-segment" style="flex:13.5;background:#f59e0b">$13,5B</div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+      <span class="legend-item"><span class="legend-dot" style="background:#3b82f6"></span>Serveurs IA</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#6366f1"></span>Serveurs trad.</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#34d399"></span>Stockage</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>CSG</span>
+    </div>
+
+    <div style="margin-top:16px">
+      <div class="card-title">Marge opérationnelle ISG</div>
+      <div class="chart-container" style="height:120px">
+        <canvas id="marginChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-card">
+    <div class="card-title">Indicateurs macro IA</div>
+    <div class="stat-row"><span class="stat-label">IA Capex / PIB US</span><span class="stat-value green">~45%</span></div>
+    <div class="stat-row"><span class="stat-label">Contribution IA au PIB mondial</span><span class="stat-value">$15T</span></div>
+    <div class="stat-row"><span class="stat-label">Croissance tokens</span><span class="stat-value green">100x</span></div>
+    <div class="stat-row"><span class="stat-label">Données produites d'ici 2029</span><span class="stat-value">527 ZB</span></div>
+    <div style="height:12px"></div>
+    <div class="card-title">Adoption enterprise</div>
+    <div class="stat-row"><span class="stat-label">GenAI on-prem sous 24 mois</span><span class="stat-value green">85%</span></div>
+    <div class="stat-row"><span class="stat-label">Budget IA incrémental</span><span class="stat-value">67%</span></div>
+    <div class="stat-row"><span class="stat-label">Vendeurs infra. comme partenaires</span><span class="stat-value">77%</span></div>
+    <div class="stat-row"><span class="stat-label">Clients enterprise Dell IA</span><span class="stat-value green">4 000+</span></div>
+  </div>
+</div>
+
+<div class="charts-row" style="grid-template-columns: 1fr 1fr">
+  <div class="chart-panel">
+    <div class="panel-title">Cash-flow opérationnel trimestriel</div>
+    <div class="panel-sub">Fiscal quarter ($Mds)</div>
+    <div class="chart-container" style="height:170px">
+      <canvas id="cfoChart"></canvas>
+    </div>
+  </div>
+  <div class="chart-panel">
+    <div class="panel-title">Retour aux actionnaires trimestriel</div>
+    <div class="panel-sub">Rachats d'actions + dividendes ($Mds)</div>
+    <div class="chart-container" style="height:170px">
+      <canvas id="returnChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <span>Sources : Dell Technologies Q4 FY2026 Earnings, Investor Presentation, transcripts Q1 FY2025–Q4 FY2026</span>
+  <span>Données au 27 mars 2026 &middot; Ce document ne constitue pas un conseil en investissement</span>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const gridColor = 'rgba(255,255,255,0.05)';
+const tickColor = '#4a5568';
+
+Chart.defaults.font.family = "'DM Sans', system-ui, sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = tickColor;
+
+const baseScales = {
+  x: { grid: { display: false }, ticks: { color: tickColor, font: { size: 10 } } },
+  y: { grid: { color: gridColor }, ticks: { color: tickColor, font: { size: 10 } }, border: { display: false } }
+};
+
+const quarters = ['Q2 25','Q3 25','Q4 25','Q1 26','Q2 26','Q3 26','Q4 26'];
+
+new Chart(document.getElementById('aiChart'), {
+  type: 'bar',
+  data: {
+    labels: quarters,
+    datasets: [
+      { label: 'Commandes', data: [3.2,3.6,1.7,12.1,5.6,12.3,34.1], backgroundColor: '#3b82f6', borderRadius: 3, barPercentage: 0.5, categoryPercentage: 0.7 },
+      { label: 'Livraisons', data: [3.1,2.9,2.1,1.8,8.2,5.6,9.5], backgroundColor: '#34d399', borderRadius: 3, barPercentage: 0.5, categoryPercentage: 0.7 },
+      { label: 'Backlog', data: [3.8,4.5,4.1,14.4,11.7,18.4,43], type: 'line', borderColor: '#f59e0b', backgroundColor: 'transparent', pointBackgroundColor: '#f59e0b', pointRadius: 3.5, pointBorderWidth: 0, borderWidth: 2.5, tension: 0.35, yAxisID: 'y2' }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
+    scales: {
+      x: baseScales.x,
+      y: { ...baseScales.y, ticks: { ...baseScales.y.ticks, callback: v => '$'+v+'B' } },
+      y2: { position: 'right', grid: { display: false }, ticks: { color: '#b78c20', font: { size: 10 }, callback: v => '$'+v+'B' }, border: { display: false } }
+    }
+  }
+});
+
+new Chart(document.getElementById('revChart'), {
+  type: 'bar',
+  data: {
+    labels: quarters,
+    datasets: [
+      { label: 'ISG', data: [11.6,11.4,11.4,10.3,16.8,14.1,19.6], backgroundColor: '#6366f1', borderRadius: 3, barPercentage: 0.6 },
+      { label: 'CSG', data: [12.4,12.1,11.9,12.5,12.5,12.5,13.5], backgroundColor: '#3b82f6', borderRadius: 3, barPercentage: 0.6 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { ...baseScales.x, stacked: true },
+      y: { ...baseScales.y, stacked: true, ticks: { ...baseScales.y.ticks, callback: v => '$'+v } }
+    }
+  }
+});
+
+new Chart(document.getElementById('marginChart'), {
+  type: 'line',
+  data: {
+    labels: quarters,
+    datasets: [{
+      data: [11.0,13.3,18.1,9.7,8.8,12.4,14.8],
+      borderColor: '#34d399', backgroundColor: 'rgba(52,211,153,0.08)',
+      fill: true, pointBackgroundColor: '#34d399', pointRadius: 3, pointBorderWidth: 0, borderWidth: 2, tension: 0.3
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { ...baseScales.x, ticks: { ...baseScales.x.ticks, font: { size: 9 } } },
+      y: { ...baseScales.y, min: 5, max: 22, ticks: { ...baseScales.y.ticks, font: { size: 9 }, callback: v => v+'%' } }
+    }
+  }
+});
+
+new Chart(document.getElementById('cfoChart'), {
+  type: 'bar',
+  data: {
+    labels: quarters,
+    datasets: [{
+      data: [1.3,1.6,0.6,2.8,2.5,1.2,4.7],
+      backgroundColor: quarters.map((_,i) => i===6 ? '#3b82f6' : 'rgba(59,130,246,0.35)'),
+      borderRadius: 3, barPercentage: 0.55
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '$'+ctx.parsed.y+'B' } } },
+    scales: {
+      x: baseScales.x,
+      y: { ...baseScales.y, ticks: { ...baseScales.y.ticks, callback: v => '$'+v+'B' } }
+    }
+  }
+});
+
+new Chart(document.getElementById('returnChart'), {
+  type: 'bar',
+  data: {
+    labels: quarters,
+    datasets: [{
+      data: [1.0,0.7,1.1,2.4,1.3,1.6,2.2],
+      backgroundColor: quarters.map((_,i) => i===6 ? '#f59e0b' : 'rgba(245,158,11,0.35)'),
+      borderRadius: 3, barPercentage: 0.55
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '$'+ctx.parsed.y+'B' } } },
+    scales: {
+      x: baseScales.x,
+      y: { ...baseScales.y, ticks: { ...baseScales.y.ticks, callback: v => '$'+v+'B' } }
+    }
+  }
+});
+</script>
+</body>
+</html>
